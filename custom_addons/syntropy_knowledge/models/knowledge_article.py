@@ -392,15 +392,24 @@ class KnowledgeArticle(models.Model):
     # ==================================================================
 
     def init(self):
-        """Create a GIN index on the article name for full-text search."""
+        """Create a GIN trigram index on article name for full-text search (if pg_trgm is available)."""
         super().init()
-        create_index(
-            self.env.cr,
-            make_index_name(self._table, 'name_gin'),
-            self._table,
-            [SQL("name gin_trgm_ops")],
-            method='GIN',
-        )
+        try:
+            create_index(
+                self.env.cr,
+                make_index_name(self._table, 'name_gin'),
+                self._table,
+                [SQL("name gin_trgm_ops")],
+                method='GIN',
+            )
+        except Exception:
+            self.env.cr.rollback()
+            import logging
+            logging.getLogger(__name__).warning(
+                "Could not create GIN trigram index on knowledge_article.name. "
+                "Install PostgreSQL extension pg_trgm for better search performance: "
+                "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+            )
 
     # ==================================================================
     # CONSTRAINTS
