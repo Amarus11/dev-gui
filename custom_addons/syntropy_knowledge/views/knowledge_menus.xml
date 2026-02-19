@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  Root menu                                                    -->
+    <!-- ============================================================ -->
+    <menuitem id="knowledge_menu_root"
+              name="Knowledge"
+              web_icon="syntropy_knowledge,static/description/icon.png"
+              sequence="17"/>
+
+    <!-- ============================================================ -->
+    <!--  Top-level entries                                           -->
+    <!-- ============================================================ -->
+    <menuitem id="knowledge_menu_home"
+              name="Home"
+              parent="knowledge_menu_root"
+              action="ir_actions_server_knowledge_home_page"
+              sequence="1"/>
+
+    <menuitem id="knowledge_menu_search"
+              name="Articles"
+              parent="knowledge_menu_root"
+              action="knowledge_article_action"
+              sequence="2"/>
+
+    <!-- ============================================================ -->
+    <!--  Configuration                                               -->
+    <!-- ============================================================ -->
+    <menuitem id="knowledge_menu_configuration"
+              name="Configuration"
+              parent="knowledge_menu_root"
+              groups="base.group_no_one"
+              sequence="99"/>
+
+    <menuitem id="knowledge_menu_config_members"
+              name="Members"
+              parent="knowledge_menu_configuration"
+              action="knowledge_article_member_action"
+              groups="base.group_system"
+              sequence="1"/>
+
+    <menuitem id="knowledge_menu_config_favorites"
+              name="Favorites"
+              parent="knowledge_menu_configuration"
+              action="knowledge_article_favorite_action"
+              groups="base.group_system"
+              sequence="2"/>
+
+    <menuitem id="knowledge_menu_config_trashed"
+              name="Trashed"
+              parent="knowledge_menu_configuration"
+              action="knowledge_article_action_trashed"
+              groups="base.group_system"
+              sequence="3"/>
+
+    <menuitem id="knowledge_menu_config_stages"
+              name="Stages"
+              parent="knowledge_menu_configuration"
+              action="knowledge_article_stage_action"
+              sequence="4"/>
+
+    <menuitem id="knowledge_menu_config_tags"
+              name="Tags"
+              parent="knowledge_menu_configuration"
+              sequence="5"/>
+
+    <menuitem id="knowledge_menu_config_categories"
+              name="Categories"
+              parent="knowledge_menu_configuration"
+              sequence="6"/>
+
+</odoo>

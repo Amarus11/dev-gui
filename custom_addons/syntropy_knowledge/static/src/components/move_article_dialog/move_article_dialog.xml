@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.MoveArticleDialog">
+        <Dialog title="'Move Article'" size="'md'">
+            <div class="o_knowledge_move_dialog">
+                <!-- Search -->
+                <div class="mb-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Search articles..."
+                           t-on-input="onSearchInput"
+                           t-ref="searchInput"/>
+                </div>
+
+                <!-- Article tree for selection -->
+                <div class="o_knowledge_move_tree border rounded p-2"
+                     style="max-height: 400px; overflow-y: auto;">
+
+                    <!-- Root option (no parent) -->
+                    <div class="o_knowledge_move_item py-1 px-2 rounded cursor-pointer"
+                         t-att-class="{ 'bg-primary text-white': state.selectedId === false }"
+                         t-on-click="() => this.selectTarget(false)">
+                        <i class="fa fa-home me-2"/>
+                        <span>Root (No parent)</span>
+                    </div>
+
+                    <t t-foreach="state.articles" t-as="article" t-key="article.id">
+                        <div class="o_knowledge_move_item py-1 px-2 rounded cursor-pointer"
+                             t-att-class="{ 'bg-primary text-white': state.selectedId === article.id }"
+                             t-att-style="'padding-left: ' + (article.level * 20 + 8) + 'px'"
+                             t-on-click="() => this.selectTarget(article.id)">
+                            <span class="me-2" t-if="article.icon" t-out="article.icon"/>
+                            <i class="fa fa-file-text-o me-2" t-else=""/>
+                            <span t-out="article.name"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="onConfirm"
+                        t-att-disabled="state.selectedId === undefined">
+                    Move
+                </button>
+                <button class="btn btn-secondary" t-on-click="props.close">
+                    Cancel
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

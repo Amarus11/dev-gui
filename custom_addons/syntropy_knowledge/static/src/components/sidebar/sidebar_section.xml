@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.SidebarSection">
+        <div class="o_knowledge_sidebar_section">
+            <!-- Section header -->
+            <div class="o_knowledge_section_header d-flex align-items-center px-3 py-2 cursor-pointer"
+                 t-on-click="toggleCollapse">
+                <i t-att-class="'fa fa-caret-' + (state.collapsed ? 'right' : 'down') + ' me-2 text-muted small'"
+                    style="width: 10px;"/>
+                <i t-att-class="'fa ' + props.icon + ' me-2 text-muted'"/>
+                <span class="text-uppercase fw-bold small text-muted flex-grow-1"
+                      t-out="props.title"/>
+                <button t-if="props.canCreate"
+                        class="btn btn-link btn-sm p-0 text-muted o_knowledge_section_create"
+                        t-on-click.stop="onCreateClick"
+                        title="Create article">
+                    <i class="fa fa-plus"/>
+                </button>
+            </div>
+
+            <!-- Section body (article rows) -->
+            <ul t-if="!state.collapsed"
+                class="o_knowledge_section_body list-unstyled mb-0">
+                <t t-foreach="props.articleIds" t-as="articleId" t-key="articleId">
+                    <t t-set="article" t-value="props.articles[articleId]"/>
+                    <KnowledgeSidebarRow
+                        t-if="article"
+                        article="article"
+                        articles="props.articles"
+                        activeArticleId="props.activeArticleId"
+                        unfoldedIds="props.unfoldedIds"
+                        sidebar="props.sidebar"
+                        depth="0"
+                        isFavoriteRow="props.isFavoriteSection || false"
+                    />
+                </t>
+            </ul>
+        </div>
+    </t>
+
+</templates>

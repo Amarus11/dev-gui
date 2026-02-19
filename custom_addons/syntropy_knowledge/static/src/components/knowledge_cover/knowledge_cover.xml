@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.KnowledgeCover">
+        <div t-if="hasCover" class="o_knowledge_cover position-relative">
+            <img class="o_knowledge_cover_image w-100"
+                 t-att-src="coverUrl"
+                 style="height: 220px; object-fit: cover; cursor: grab;"
+                 t-att-style="'object-position: center ' + coverPosition + '%;'"
+                 t-on-pointerdown="onPointerDown"
+                 draggable="false"/>
+            <div class="o_knowledge_cover_actions position-absolute end-0 top-0 m-2 d-none">
+                <button class="btn btn-sm btn-light shadow-sm me-1" t-on-click="onChangeCover">
+                    <i class="fa fa-image me-1"/>Change
+                </button>
+                <button class="btn btn-sm btn-light shadow-sm" t-on-click="onRemoveCover">
+                    <i class="fa fa-times"/>
+                </button>
+            </div>
+        </div>
+    </t>
+
+</templates>

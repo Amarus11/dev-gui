@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.CommentsPanel">
+        <div class="o_knowledge_comments_panel p-3">
+
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-3">
+                <h6 class="m-0 fw-bold flex-grow-1">Comments</h6>
+                <div class="btn-group btn-group-sm">
+                    <button t-att-class="'btn ' + (state.filter === 'open' ? 'btn-primary' : 'btn-outline-secondary')"
+                            t-on-click="() => this.setFilter('open')">
+                        Open
+                    </button>
+                    <button t-att-class="'btn ' + (state.filter === 'resolved' ? 'btn-primary' : 'btn-outline-secondary')"
+                            t-on-click="() => this.setFilter('resolved')">
+                        Resolved
+                    </button>
+                    <button t-att-class="'btn ' + (state.filter === 'all' ? 'btn-primary' : 'btn-outline-secondary')"
+                            t-on-click="() => this.setFilter('all')">
+                        All
+                    </button>
+                </div>
+            </div>
+
+            <!-- New comment input -->
+            <div class="mb-3">
+                <div class="input-group input-group-sm">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Add a comment..."
+                           t-att-value="state.newCommentText"
+                           t-on-input="(ev) => { state.newCommentText = ev.target.value; }"
+                           t-on-keydown="(ev) => { if (ev.key === 'Enter') this.createThread(); }"/>
+                    <button class="btn btn-primary" t-on-click="createThread">
+                        <i class="fa fa-paper-plane"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <t t-if="state.loading">
+                <div class="text-center py-3">
+                    <i class="fa fa-spinner fa-spin"/>
+                </div>
+            </t>
+
+            <!-- Thread list -->
+            <t t-if="!state.loading">
+                <t t-if="filteredThreads.length === 0">
+                    <div class="text-center text-muted py-4">
+                        <i class="fa fa-comments-o d-block mb-2" style="font-size: 2rem;"/>
+                        <span>No comments yet</span>
+                    </div>
+                </t>
+
+                <t t-foreach="filteredThreads" t-as="thread" t-key="thread.id">
+                    <div class="o_knowledge_comment_thread border rounded p-2 mb-2">
+                        <!-- Anchor text -->
+                        <div t-if="thread.article_anchor_text"
+                             class="border-start border-3 border-primary ps-2 mb-2 small text-muted fst-italic text-truncate">
+                            <t t-out="thread.article_anchor_text"/>
+                        </div>
+
+                        <!-- Messages -->
+                        <t t-foreach="thread.messages || []" t-as="msg" t-key="msg.id">
+                            <div class="d-flex align-items-start gap-2 mb-2">
+                                <img t-att-src="msg.author_avatar"
+                                     class="rounded-circle"
+                                     style="width: 24px; height: 24px; object-fit: cover;"/>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-semibold small" t-out="msg.author_name"/>
+                                        <span class="text-muted" style="font-size: 10px;" t-out="msg.date"/>
+                                    </div>
+                                    <div class="small" t-out="msg.body"/>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Resolve toggle -->
+                        <div class="text-end">
+                            <button class="btn btn-link btn-sm p-0 small"
+                                    t-on-click="() => this.toggleResolve(thread.id)">
+                                <i t-att-class="'fa me-1 ' + (thread.is_resolved ? 'fa-undo' : 'fa-check')"/>
+                                <t t-if="thread.is_resolved">Reopen</t>
+                                <t t-else="">Resolve</t>
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+
+</templates>

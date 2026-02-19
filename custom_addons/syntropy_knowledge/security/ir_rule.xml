@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.article Rules                                     -->
+    <!-- ============================================================ -->
+
+    <!-- System: full CRUD -->
+    <record id="knowledge_article_rule_system" model="ir.rule">
+        <field name="name">Knowledge Article: System full access</field>
+        <field name="model_id" ref="model_knowledge_article"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Internal Users: read if has access -->
+    <record id="knowledge_article_rule_user_read" model="ir.rule">
+        <field name="name">Knowledge Article: Users read</field>
+        <field name="model_id" ref="model_knowledge_article"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('user_has_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Internal Users: write/create/delete if has write access -->
+    <record id="knowledge_article_rule_user_write" model="ir.rule">
+        <field name="name">Knowledge Article: Users write</field>
+        <field name="model_id" ref="model_knowledge_article"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('user_has_write_access', '=', True)]</field>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.article.member Rules                              -->
+    <!-- ============================================================ -->
+
+    <record id="knowledge_article_member_rule_user_read" model="ir.rule">
+        <field name="name">Knowledge Member: Users read own article's members</field>
+        <field name="model_id" ref="model_knowledge_article_member"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('article_id.user_has_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="knowledge_article_member_rule_system" model="ir.rule">
+        <field name="name">Knowledge Member: System full access</field>
+        <field name="model_id" ref="model_knowledge_article_member"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.article.favorite Rules                            -->
+    <!-- ============================================================ -->
+
+    <record id="knowledge_article_favorite_rule_user" model="ir.rule">
+        <field name="name">Knowledge Favorite: Users own favorites</field>
+        <field name="model_id" ref="model_knowledge_article_favorite"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id), ('article_id.user_has_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="knowledge_article_favorite_rule_system" model="ir.rule">
+        <field name="name">Knowledge Favorite: System full access</field>
+        <field name="model_id" ref="model_knowledge_article_favorite"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.article.stage Rules                               -->
+    <!-- ============================================================ -->
+
+    <record id="knowledge_article_stage_rule_user_read" model="ir.rule">
+        <field name="name">Knowledge Stage: Users read</field>
+        <field name="model_id" ref="model_knowledge_article_stage"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('parent_id.user_has_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="knowledge_article_stage_rule_user_write" model="ir.rule">
+        <field name="name">Knowledge Stage: Users write</field>
+        <field name="model_id" ref="model_knowledge_article_stage"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('parent_id.user_has_write_access', '=', True)]</field>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="knowledge_article_stage_rule_system" model="ir.rule">
+        <field name="name">Knowledge Stage: System full access</field>
+        <field name="model_id" ref="model_knowledge_article_stage"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.article.thread Rules                              -->
+    <!-- ============================================================ -->
+
+    <record id="knowledge_article_thread_rule_user_read" model="ir.rule">
+        <field name="name">Knowledge Thread: Users read</field>
+        <field name="model_id" ref="model_knowledge_article_thread"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('article_id.user_has_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="knowledge_article_thread_rule_user_write" model="ir.rule">
+        <field name="name">Knowledge Thread: Users write</field>
+        <field name="model_id" ref="model_knowledge_article_thread"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('article_id.user_has_write_access', '=', True)]</field>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  knowledge.invite Rules                                      -->
+    <!-- ============================================================ -->
+
+    <record id="knowledge_invite_rule_user" model="ir.rule">
+        <field name="name">Knowledge Invite: Users with write access</field>
+        <field name="model_id" ref="model_knowledge_invite"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('article_id.user_has_write_access', '=', True)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <record id="knowledge_invite_rule_system" model="ir.rule">
+        <field name="name">Knowledge Invite: System full access</field>
+        <field name="model_id" ref="model_knowledge_invite"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

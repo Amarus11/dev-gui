@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default stages for article items — created per-parent via code -->
+        <!-- These serve as reference XML-IDs for template stages -->
+    </data>
+</odoo>

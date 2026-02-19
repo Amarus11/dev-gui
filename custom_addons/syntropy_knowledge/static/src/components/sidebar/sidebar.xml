@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.Sidebar">
+        <aside class="o_knowledge_sidebar d-flex flex-column border-end bg-view"
+               t-ref="sidebar"
+               t-att-style="'width: ' + state.sidebarWidth + 'px; min-width: 200px; max-width: 500px;'">
+
+            <!-- Sidebar header with search -->
+            <div class="o_knowledge_sidebar_header p-3 border-bottom">
+                <div class="d-flex align-items-center mb-2">
+                    <h5 class="m-0 fw-bold flex-grow-1">Knowledge</h5>
+                </div>
+                <div class="position-relative">
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           placeholder="Search articles..."
+                           t-att-value="state.searchTerm"
+                           t-on-input="onSearchInput"/>
+                    <button t-if="state.searchTerm"
+                            class="btn btn-link btn-sm position-absolute end-0 top-50 translate-middle-y text-muted"
+                            t-on-click="clearSearch">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search results overlay -->
+            <div t-if="state.isSearching" class="o_knowledge_search_results flex-grow-1 overflow-auto p-2">
+                <t t-if="state.searchResults.length === 0">
+                    <div class="text-muted text-center py-4">
+                        <i class="fa fa-search mb-2 d-block" style="font-size: 2rem;"/>
+                        <span>No results found</span>
+                    </div>
+                </t>
+                <t t-foreach="state.searchResults" t-as="result" t-key="result.id">
+                    <div class="o_knowledge_search_item p-2 rounded cursor-pointer"
+                         t-on-click="() => this.openArticle(result.id)">
+                        <div class="d-flex align-items-center">
+                            <span class="me-2" t-if="result.icon" t-out="result.icon"/>
+                            <i class="fa fa-file-text-o me-2 text-muted" t-else=""/>
+                            <span class="fw-medium text-truncate" t-out="result.name"/>
+                        </div>
+                        <div t-if="result.body_snippet"
+                             class="text-muted small text-truncate mt-1"
+                             t-out="result.body_snippet"/>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Article tree sections -->
+            <div t-if="!state.isSearching" class="o_knowledge_sidebar_body flex-grow-1 overflow-auto">
+                <t t-if="state.loading">
+                    <div class="text-center py-4">
+                        <i class="fa fa-spinner fa-spin"/>
+                    </div>
+                </t>
+
+                <t t-if="!state.loading">
+                    <!-- Favorites section -->
+                    <KnowledgeSidebarSection
+                        t-if="state.favoriteIds.length > 0"
+                        title="'Favorites'"
+                        icon="'fa-star'"
+                        articleIds="state.favoriteIds"
+                        articles="state.articles"
+                        activeArticleId="activeArticleId"
+                        unfoldedIds="state.unfoldedIds"
+                        sidebar="this"
+                        isFavoriteSection="true"
+                    />
+
+                    <!-- Workspace section -->
+                    <KnowledgeSidebarSection
+                        title="'Workspace'"
+                        icon="'fa-globe'"
+                        articleIds="state.workspaceIds"
+                        articles="state.articles"
+                        activeArticleId="activeArticleId"
+                        unfoldedIds="state.unfoldedIds"
+                        sidebar="this"
+                        canCreate="true"
+                        createCategory="'workspace'"
+                    />
+
+                    <!-- Shared section -->
+                    <KnowledgeSidebarSection
+                        t-if="state.sharedIds.length > 0"
+                        title="'Shared'"
+                        icon="'fa-users'"
+                        articleIds="state.sharedIds"
+                        articles="state.articles"
+                        activeArticleId="activeArticleId"
+                        unfoldedIds="state.unfoldedIds"
+                        sidebar="this"
+                    />
+
+                    <!-- Private section -->
+                    <KnowledgeSidebarSection
+                        title="'Private'"
+                        icon="'fa-lock'"
+                        articleIds="state.privateIds"
+                        articles="state.articles"
+                        activeArticleId="activeArticleId"
+                        unfoldedIds="state.unfoldedIds"
+                        sidebar="this"
+                        canCreate="true"
+                        createCategory="'private'"
+                    />
+                </t>
+            </div>
+
+            <!-- Sidebar footer with + New button -->
+            <div class="o_knowledge_sidebar_footer p-3 border-top">
+                <button class="btn btn-primary btn-sm w-100"
+                        t-on-click="() => this.createArticle('private')">
+                    <i class="fa fa-plus me-1"/> New Article
+                </button>
+            </div>
+        </aside>
+    </t>
+
+</templates>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.SidebarRow">
+        <li class="o_knowledge_sidebar_row">
+            <!-- Row content -->
+            <div class="o_knowledge_row_content d-flex align-items-center py-1 pe-2 rounded cursor-pointer"
+                 t-att-class="{ 'o_article_active bg-primary bg-opacity-10': isActive }"
+                 t-att-style="indentStyle"
+                 t-on-click="onClick">
+
+                <!-- Fold/unfold caret -->
+                <span class="o_knowledge_caret d-inline-flex align-items-center justify-content-center"
+                      style="width: 20px; min-width: 20px;"
+                      t-on-click="onToggleFold">
+                    <i t-if="hasChildren"
+                       t-att-class="'fa fa-caret-' + (isUnfolded ? 'down' : 'right') + ' text-muted'"
+                       style="font-size: 11px;"/>
+                </span>
+
+                <!-- Icon (emoji or default) -->
+                <span class="o_knowledge_icon me-1" style="min-width: 22px; text-align: center;">
+                    <t t-if="props.article.icon" t-out="props.article.icon"/>
+                    <i t-else="" class="fa fa-file-text-o text-muted" style="font-size: 13px;"/>
+                </span>
+
+                <!-- Article name -->
+                <span class="o_knowledge_article_name text-truncate flex-grow-1"
+                      t-att-class="{ 'fw-semibold': isActive }"
+                      style="font-size: 13px;"
+                      t-out="props.article.name || 'Untitled'"/>
+
+                <!-- Hover actions -->
+                <span class="o_knowledge_row_actions d-none align-items-center gap-1">
+                    <!-- Create child -->
+                    <button class="btn btn-link btn-sm p-0 text-muted"
+                            t-on-click="onCreateChild"
+                            title="Create child article">
+                        <i class="fa fa-plus" style="font-size: 11px;"/>
+                    </button>
+                    <!-- Toggle favorite (only in non-favorite sections) -->
+                    <button t-if="!props.isFavoriteRow"
+                            class="btn btn-link btn-sm p-0"
+                            t-att-class="props.article.is_user_favorite ? 'text-warning' : 'text-muted'"
+                            t-on-click="onToggleFavorite"
+                            title="Toggle favorite">
+                        <i t-att-class="'fa fa-star' + (props.article.is_user_favorite ? '' : '-o')"
+                           style="font-size: 11px;"/>
+                    </button>
+                </span>
+            </div>
+
+            <!-- Children (recursive) -->
+            <ul t-if="isUnfolded and hasChildren and childrenIds.length > 0"
+                class="list-unstyled mb-0">
+                <t t-foreach="childrenIds" t-as="childId" t-key="childId">
+                    <t t-set="childArticle" t-value="props.articles[childId]"/>
+                    <KnowledgeSidebarRow
+                        t-if="childArticle"
+                        article="childArticle"
+                        articles="props.articles"
+                        activeArticleId="props.activeArticleId"
+                        unfoldedIds="props.unfoldedIds"
+                        sidebar="props.sidebar"
+                        depth="props.depth + 1"
+                        isFavoriteRow="props.isFavoriteRow"
+                    />
+                </t>
+            </ul>
+        </li>
+    </t>
+
+</templates>

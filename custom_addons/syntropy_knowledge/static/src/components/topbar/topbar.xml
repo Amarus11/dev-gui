@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.Topbar">
+        <div class="o_knowledge_topbar d-flex align-items-center px-3 py-2 border-bottom bg-view gap-2">
+
+            <!-- Left: Breadcrumb / article info -->
+            <div class="d-flex align-items-center flex-grow-1 gap-2 text-truncate">
+                <!-- Category badge -->
+                <span class="badge rounded-pill bg-light text-muted border small"
+                      t-if="category">
+                    <i t-att-class="'fa ' + categoryIcon + ' me-1'"/>
+                    <t t-out="categoryLabel"/>
+                </span>
+
+                <!-- Lock icon -->
+                <i t-if="isLocked" class="fa fa-lock text-muted" title="Locked"/>
+
+                <!-- Article name display -->
+                <span class="fw-semibold text-truncate" style="font-size: 15px;">
+                    <t t-if="articleIcon">
+                        <span class="me-1" t-out="articleIcon"/>
+                    </t>
+                    <t t-out="articleName"/>
+                </span>
+            </div>
+
+            <!-- Right: Action buttons -->
+            <div class="d-flex align-items-center gap-1">
+
+                <!-- New article button -->
+                <button class="btn btn-primary btn-sm"
+                        t-on-click="onNewArticle"
+                        title="New Article">
+                    <i class="fa fa-plus me-1"/>
+                    <span class="d-none d-lg-inline">New</span>
+                </button>
+
+                <!-- Favorite toggle -->
+                <button class="btn btn-sm"
+                        t-att-class="isFavorite ? 'btn-warning' : 'btn-outline-secondary'"
+                        t-on-click="onToggleFavorite"
+                        title="Toggle Favorite">
+                    <i t-att-class="'fa fa-star' + (isFavorite ? '' : '-o')"/>
+                </button>
+
+                <!-- Share panel toggle -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm"
+                            t-on-click="toggleSharePanel"
+                            title="Share">
+                        <i class="fa fa-share-alt"/>
+                        <span class="d-none d-lg-inline ms-1">Share</span>
+                    </button>
+                    <div t-if="state.showSharePanel"
+                         class="dropdown-menu show p-0 shadow-lg"
+                         style="min-width: 420px; right: 0; left: auto;">
+                        <PermissionPanel
+                            articleId="articleId"
+                            onClose="() => { state.showSharePanel = false; }"
+                        />
+                    </div>
+                </div>
+
+                <!-- More options dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary btn-sm"
+                            t-on-click="toggleMoreMenu">
+                        <i class="fa fa-ellipsis-v"/>
+                    </button>
+                    <div t-if="state.showMoreMenu"
+                         class="dropdown-menu show shadow-sm"
+                         style="right: 0; left: auto; min-width: 220px;">
+
+                        <button class="dropdown-item" t-on-click="onToggleLock">
+                            <i t-att-class="'fa fa-fw me-2 ' + (isLocked ? 'fa-unlock' : 'fa-lock')"/>
+                            <t t-if="isLocked">Unlock</t>
+                            <t t-else="">Lock editing</t>
+                        </button>
+                        <button class="dropdown-item" t-on-click="onToggleFullWidth">
+                            <i class="fa fa-arrows-h fa-fw me-2"/>
+                            Toggle full width
+                        </button>
+                        <div class="dropdown-divider"/>
+
+                        <button class="dropdown-item" t-on-click="onDuplicate">
+                            <i class="fa fa-clone fa-fw me-2"/>
+                            Duplicate
+                        </button>
+                        <button class="dropdown-item" t-on-click="onMoveArticle">
+                            <i class="fa fa-arrows fa-fw me-2"/>
+                            Move to...
+                        </button>
+                        <div class="dropdown-divider"/>
+
+                        <button class="dropdown-item" t-on-click="onTogglePublish">
+                            <i class="fa fa-globe fa-fw me-2"/>
+                            <t t-if="record.data.is_published">Unpublish</t>
+                            <t t-else="">Publish</t>
+                        </button>
+                        <button class="dropdown-item" t-on-click="onCopyShareLink"
+                                t-if="record.data.share_token">
+                            <i class="fa fa-link fa-fw me-2"/>
+                            Copy share link
+                        </button>
+                        <div class="dropdown-divider"/>
+
+                        <button class="dropdown-item" t-on-click="onViewVersionHistory">
+                            <i class="fa fa-history fa-fw me-2"/>
+                            Version history
+                        </button>
+                        <button class="dropdown-item" t-on-click="onExportPdf">
+                            <i class="fa fa-file-pdf-o fa-fw me-2"/>
+                            Export as PDF
+                        </button>
+                        <div class="dropdown-divider"/>
+
+                        <button class="dropdown-item text-danger" t-on-click="onTrash">
+                            <i class="fa fa-trash fa-fw me-2"/>
+                            Move to trash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

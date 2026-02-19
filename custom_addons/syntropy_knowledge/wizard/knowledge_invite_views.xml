@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="knowledge_invite_view_form" model="ir.ui.view">
+        <field name="name">knowledge.invite.form</field>
+        <field name="model">knowledge.invite</field>
+        <field name="arch" type="xml">
+            <form string="Invite Members">
+                <group>
+                    <field name="article_id" invisible="1"/>
+                    <field name="partner_ids"
+                           widget="many2many_tags_email"
+                           options="{'no_quick_create': True}"
+                           placeholder="Type a name or email..."/>
+                    <field name="permission"/>
+                    <field name="message"
+                           placeholder="Add a personal message (optional)..."
+                           invisible="permission == 'none'"/>
+                </group>
+                <footer>
+                    <button string="Invite"
+                            type="object"
+                            name="action_invite"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="knowledge_invite_action" model="ir.actions.act_window">
+        <field name="name">Invite Members</field>
+        <field name="res_model">knowledge.invite</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'medium'}</field>
+    </record>
+
+</odoo>

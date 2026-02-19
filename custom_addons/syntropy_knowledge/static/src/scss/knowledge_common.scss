@@ -1,0 +1,58 @@
+// ============================================================================
+// Syntropy Knowledge — Common Variables & Mixins
+// ============================================================================
+
+// Color palette
+$knowledge-sidebar-bg: #f8f9fa;
+$knowledge-sidebar-width: 280px;
+$knowledge-sidebar-min-width: 200px;
+$knowledge-sidebar-max-width: 450px;
+$knowledge-sidebar-border: #dee2e6;
+$knowledge-primary: #714b67; // Odoo purple
+$knowledge-accent: #017e84;
+$knowledge-text-muted: #6c757d;
+$knowledge-hover-bg: rgba(0, 0, 0, 0.04);
+$knowledge-active-bg: rgba(113, 75, 103, 0.08);
+$knowledge-resizer-width: 4px;
+$knowledge-tree-indent: 20px;
+
+// Mixins
+@mixin knowledge-transition($properties: all, $duration: 0.15s) {
+    transition: $properties $duration ease-in-out;
+}
+
+@mixin knowledge-scrollbar {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 3px;
+        &:hover {
+            background: rgba(0, 0, 0, 0.25);
+        }
+    }
+    // Firefox
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+@mixin knowledge-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+// Base reset for knowledge views
+.o_knowledge {
+    font-family: inherit;
+    line-height: 1.5;
+
+    // Remove default Odoo padding on form views
+    .o_form_view {
+        padding: 0 !important;
+    }
+}

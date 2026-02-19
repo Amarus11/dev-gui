@@ -1,0 +1,592 @@
+// ============================================================================
+// Syntropy Knowledge — Views & Layout
+// ============================================================================
+@import "knowledge_common";
+
+// =========================================================
+// Main layout
+// =========================================================
+.o_knowledge_form_view {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--o-view-background-color, #fff);
+}
+
+// =========================================================
+// Sidebar
+// =========================================================
+.o_knowledge_sidebar {
+    width: $knowledge-sidebar-width;
+    min-width: $knowledge-sidebar-min-width;
+    max-width: $knowledge-sidebar-max-width;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: $knowledge-sidebar-bg;
+    border-right: 1px solid $knowledge-sidebar-border;
+    overflow: hidden;
+    @include knowledge-transition(width);
+
+    // Header / search area
+    .o_knowledge_sidebar_header {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+        .o_knowledge_sidebar_search {
+            position: relative;
+
+            input {
+                font-size: 13px;
+                padding-left: 30px;
+                border-color: #e0e0e0;
+                border-radius: 8px;
+                background: #fff;
+
+                &:focus {
+                    border-color: $knowledge-primary;
+                    box-shadow: 0 0 0 2px rgba($knowledge-primary, 0.15);
+                }
+            }
+
+            .o_knowledge_search_icon {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $knowledge-text-muted;
+                font-size: 12px;
+            }
+        }
+    }
+
+    // Sections
+    .o_knowledge_sidebar_body {
+        flex: 1;
+        overflow-y: auto;
+        @include knowledge-scrollbar;
+        padding: 8px 0;
+    }
+
+    .o_knowledge_sidebar_section {
+        margin-bottom: 4px;
+
+        .o_knowledge_section_header {
+            display: flex;
+            align-items: center;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: $knowledge-text-muted;
+            cursor: pointer;
+            user-select: none;
+            @include knowledge-transition;
+
+            &:hover {
+                color: darken($knowledge-text-muted, 20%);
+
+                .o_knowledge_section_create {
+                    opacity: 1;
+                }
+            }
+
+            .o_knowledge_section_caret {
+                width: 16px;
+                font-size: 10px;
+                @include knowledge-transition(transform);
+
+                &.collapsed {
+                    transform: rotate(-90deg);
+                }
+            }
+
+            .o_knowledge_section_icon {
+                width: 18px;
+                text-align: center;
+                font-size: 12px;
+            }
+
+            .o_knowledge_section_title {
+                flex: 1;
+                @include knowledge-ellipsis;
+            }
+
+            .o_knowledge_section_create {
+                opacity: 0;
+                padding: 2px 6px;
+                border-radius: 4px;
+                @include knowledge-transition(opacity);
+
+                &:hover {
+                    background: $knowledge-hover-bg;
+                }
+            }
+        }
+
+        .o_knowledge_section_body {
+            overflow: hidden;
+        }
+    }
+
+    // Article rows
+    .o_knowledge_sidebar_row {
+        display: flex;
+        align-items: center;
+        padding: 4px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        @include knowledge-transition;
+        border-radius: 0;
+        position: relative;
+
+        &:hover {
+            background: $knowledge-hover-bg;
+
+            .o_knowledge_row_actions {
+                opacity: 1;
+            }
+        }
+
+        &.active {
+            background: $knowledge-active-bg;
+            font-weight: 600;
+            color: $knowledge-primary;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 4px;
+                bottom: 4px;
+                width: 3px;
+                background: $knowledge-primary;
+                border-radius: 0 2px 2px 0;
+            }
+        }
+
+        .o_knowledge_row_caret {
+            width: 16px;
+            font-size: 10px;
+            color: $knowledge-text-muted;
+            flex-shrink: 0;
+            @include knowledge-transition(transform);
+
+            &.expanded {
+                transform: rotate(90deg);
+            }
+        }
+
+        .o_knowledge_row_icon {
+            width: 22px;
+            font-size: 14px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .o_knowledge_row_name {
+            flex: 1;
+            @include knowledge-ellipsis;
+        }
+
+        .o_knowledge_row_actions {
+            opacity: 0;
+            display: flex;
+            gap: 2px;
+            @include knowledge-transition(opacity);
+
+            .btn {
+                padding: 2px 5px;
+                font-size: 11px;
+                border-radius: 4px;
+                line-height: 1;
+            }
+        }
+    }
+
+    // Tree indentation using padding
+    @for $i from 0 through 10 {
+        .o_knowledge_sidebar_row[data-level="#{$i}"] {
+            padding-left: #{16 + $i * $knowledge-tree-indent}px;
+        }
+    }
+
+    // Footer
+    .o_knowledge_sidebar_footer {
+        padding: 12px 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    // Search results overlay
+    .o_knowledge_search_results {
+        background: #fff;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+        .o_knowledge_search_result_item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            @include knowledge-transition;
+
+            &:hover {
+                background: $knowledge-hover-bg;
+            }
+
+            .o_knowledge_search_result_path {
+                font-size: 11px;
+                color: $knowledge-text-muted;
+            }
+        }
+    }
+}
+
+// =========================================================
+// Resizer
+// =========================================================
+.o_knowledge_sidebar_resizer {
+    width: $knowledge-resizer-width;
+    cursor: col-resize;
+    background: transparent;
+    @include knowledge-transition(background);
+    flex-shrink: 0;
+
+    &:hover,
+    &.resizing {
+        background: $knowledge-primary;
+    }
+}
+
+// =========================================================
+// Topbar
+// =========================================================
+.o_knowledge_topbar {
+    min-height: 48px;
+    background: var(--o-view-background-color, #fff);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 10;
+
+    .badge {
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .dropdown-menu {
+        z-index: 1050;
+    }
+
+    .dropdown-item {
+        font-size: 13px;
+        padding: 6px 16px;
+    }
+}
+
+// =========================================================
+// Article content area
+// =========================================================
+.o_knowledge_main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.o_knowledge_body {
+    flex: 1;
+    overflow-y: auto;
+    @include knowledge-scrollbar;
+
+    // Content centering
+    .o_form_sheet {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px 40px;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+    }
+
+    &.o_knowledge_full_width .o_form_sheet {
+        max-width: 100%;
+        padding: 24px 80px;
+    }
+
+    // Article title
+    .o_knowledge_article_name {
+        input {
+            font-size: 32px;
+            font-weight: 700;
+            border: none;
+            padding: 0;
+            background: transparent;
+            width: 100%;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+        }
+    }
+
+    // Editable body
+    .o_field_html {
+        .odoo-editor-editable,
+        .o_readonly {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #333;
+            min-height: 200px;
+
+            h1 { font-size: 28px; font-weight: 700; margin-top: 24px; }
+            h2 { font-size: 24px; font-weight: 600; margin-top: 20px; }
+            h3 { font-size: 20px; font-weight: 600; margin-top: 16px; }
+
+            p { margin-bottom: 8px; }
+
+            a {
+                color: $knowledge-accent;
+                text-decoration: underline;
+            }
+
+            blockquote {
+                border-left: 3px solid $knowledge-primary;
+                padding: 8px 16px;
+                margin: 16px 0;
+                background: rgba($knowledge-primary, 0.04);
+                color: darken($knowledge-text-muted, 10%);
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 16px 0;
+
+                th, td {
+                    border: 1px solid #e0e0e0;
+                    padding: 8px 12px;
+                    text-align: left;
+                }
+
+                th {
+                    background: #f8f9fa;
+                    font-weight: 600;
+                }
+            }
+
+            pre, code {
+                font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+                font-size: 13px;
+            }
+
+            pre {
+                background: #f8f9fa;
+                border: 1px solid #e0e0e0;
+                border-radius: 6px;
+                padding: 16px;
+                overflow-x: auto;
+            }
+
+            code {
+                background: rgba(0, 0, 0, 0.05);
+                padding: 2px 6px;
+                border-radius: 3px;
+            }
+
+            img {
+                max-width: 100%;
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+// =========================================================
+// Cover image
+// =========================================================
+.o_knowledge_cover {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    &:hover .o_knowledge_cover_actions {
+        display: flex !important;
+    }
+
+    .o_knowledge_cover_image {
+        display: block;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .o_knowledge_cover_actions {
+        display: none !important;
+        gap: 4px;
+    }
+}
+
+// =========================================================
+// Icon widget
+// =========================================================
+.o_knowledge_icon_widget {
+    .o_knowledge_icon_button {
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
+    .o_knowledge_emoji_picker {
+        animation: fadeInDown 0.15s ease-out;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// =========================================================
+// Permission panel
+// =========================================================
+.o_knowledge_permission_panel {
+    .form-select-sm {
+        min-width: 100px;
+    }
+}
+
+// =========================================================
+// Comments panel
+// =========================================================
+.o_knowledge_comments_panel {
+    max-height: 100vh;
+    overflow-y: auto;
+    @include knowledge-scrollbar;
+
+    .o_knowledge_comment_thread {
+        @include knowledge-transition;
+
+        &:hover {
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+    }
+}
+
+// =========================================================
+// Move dialog
+// =========================================================
+.o_knowledge_move_dialog {
+    .o_knowledge_move_tree {
+        @include knowledge-scrollbar;
+    }
+
+    .o_knowledge_move_item {
+        cursor: pointer;
+        @include knowledge-transition;
+
+        &:hover:not(.bg-primary) {
+            background: $knowledge-hover-bg;
+        }
+    }
+}
+
+// =========================================================
+// Mobile / Responsive
+// =========================================================
+@media (max-width: 768px) {
+    .o_knowledge_form_view {
+        flex-direction: column;
+    }
+
+    .o_knowledge_sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1040;
+        transform: translateX(-100%);
+        @include knowledge-transition(transform);
+        box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+        width: 85vw;
+        max-width: 360px;
+
+        &.show {
+            transform: translateX(0);
+        }
+    }
+
+    .o_knowledge_sidebar_resizer {
+        display: none;
+    }
+
+    .o_knowledge_mobile_backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1039;
+    }
+
+    .o_knowledge_body .o_form_sheet {
+        padding: 16px;
+    }
+
+    .o_knowledge_topbar {
+        .d-lg-inline {
+            display: none !important;
+        }
+    }
+}
+
+// =========================================================
+// Dark mode support
+// =========================================================
+html[data-color-scheme="dark"] {
+    .o_knowledge_sidebar {
+        background: var(--o-view-background-color, #1e1e1e);
+        border-right-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .o_knowledge_sidebar_row {
+        &:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        &.active {
+            background: rgba(113, 75, 103, 0.15);
+        }
+    }
+
+    .o_knowledge_body .o_field_html {
+        .odoo-editor-editable,
+        .o_readonly {
+            color: #e0e0e0;
+
+            blockquote {
+                background: rgba(113, 75, 103, 0.1);
+            }
+
+            pre {
+                background: #2d2d2d;
+                border-color: #444;
+            }
+
+            code {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            table th {
+                background: #2d2d2d;
+            }
+
+            table th, table td {
+                border-color: #444;
+            }
+        }
+    }
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="syntropy_knowledge.KnowledgeIcon">
+        <div class="o_knowledge_icon_widget d-inline-block position-relative">
+            <!-- Icon display / button -->
+            <button class="btn btn-link p-0 o_knowledge_icon_button"
+                    t-on-click="togglePicker"
+                    style="font-size: 40px; line-height: 1; text-decoration: none;">
+                <t t-if="currentIcon" t-out="currentIcon"/>
+                <span t-else="" class="text-muted" style="font-size: 32px;">🗎</span>
+            </button>
+
+            <!-- Emoji picker dropdown -->
+            <div t-if="state.showPicker"
+                 class="o_knowledge_emoji_picker position-absolute bg-white border rounded shadow-lg p-3 mt-1"
+                 style="z-index: 1050; width: 320px; max-height: 400px; overflow-y: auto;">
+
+                <!-- Header actions -->
+                <div class="d-flex align-items-center mb-2 gap-2">
+                    <button class="btn btn-sm btn-outline-secondary" t-on-click="setRandomIcon">
+                        <i class="fa fa-random me-1"/>Random
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" t-on-click="removeIcon"
+                            t-if="currentIcon">
+                        <i class="fa fa-times me-1"/>Remove
+                    </button>
+                    <button class="btn-close btn-sm ms-auto" t-on-click="togglePicker"/>
+                </div>
+
+                <!-- Emoji grid by category -->
+                <t t-foreach="Object.entries(emojiCategories)" t-as="entry" t-key="entry[0]">
+                    <div class="mb-2">
+                        <div class="text-muted small fw-semibold mb-1" t-out="entry[0]"/>
+                        <div class="d-flex flex-wrap gap-1">
+                            <t t-foreach="entry[1]" t-as="emoji" t-key="emoji">
+                                <button class="btn btn-light btn-sm p-1"
+                                        style="font-size: 20px; width: 36px; height: 36px; line-height: 1;"
+                                        t-on-click="() => this.selectEmoji(emoji)">
+                                    <t t-out="emoji"/>
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>
