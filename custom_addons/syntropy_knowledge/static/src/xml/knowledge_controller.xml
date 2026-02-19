@@ -9,7 +9,11 @@
             <!-- Main content area -->
             <div class="o_knowledge_main flex-grow-1 overflow-auto">
                 <t t-component="props.Renderer"
-                   t-props="contentProps"/>
+                   record="model.root"
+                   Compiler="props.Compiler"
+                   archInfo="archInfo"
+                   onNotebookPageChange.bind="onNotebookPageChange"
+                   activeNotebookPages="props.state and props.state.activeNotebookPages"/>
             </div>
         </div>
     </t>
