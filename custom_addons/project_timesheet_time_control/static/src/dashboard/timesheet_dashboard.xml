@@ -124,16 +124,18 @@
                                 <div class="card-body">
                                     <t t-if="state.dailyBreakdown.length">
                                         <div class="d-flex align-items-end justify-content-around"
-                                             style="height: 200px;">
+                                             style="height: 220px; padding-top: 10px;">
                                             <t t-foreach="state.dailyBreakdown" t-as="day" t-key="day.date">
-                                                <div class="d-flex flex-column align-items-center"
-                                                     style="flex: 1; max-width: 60px;">
-                                                    <small class="text-muted mb-1"
+                                                <div class="d-flex flex-column align-items-center justify-content-end"
+                                                     style="flex: 1; max-width: 80px; height: 100%;">
+                                                    <small class="fw-semibold mb-1"
+                                                           style="font-size: 12px;"
                                                            t-esc="formatHours(day.hours)"/>
-                                                    <div class="o_daily_bar bg-primary rounded-top"
-                                                         t-attf-style="height: {{ getDailyBarHeight(day.hours) }}%; width: 70%;"/>
-                                                    <small class="text-muted mt-1 text-truncate"
-                                                           style="max-width: 55px;"
+                                                    <div class="bg-primary rounded-top w-75 position-relative"
+                                                         t-attf-style="height: {{ getDailyBarHeight(day.hours) }}px; min-height: 4px; transition: height 0.3s ease;">
+                                                    </div>
+                                                    <small class="text-muted mt-1 text-truncate fw-medium"
+                                                           style="max-width: 70px; font-size: 11px;"
                                                            t-esc="day.date"/>
                                                 </div>
                                             </t>
@@ -158,10 +160,10 @@
                                         <small class="text-muted">(This Month)</small>
                                     </h5>
                                 </div>
-                                <div class="card-body p-0">
+                                <div class="card-body p-0" style="max-height: 450px; overflow-y: auto;">
                                     <t t-if="state.projectBreakdown.length">
                                         <table class="table table-hover mb-0">
-                                            <thead class="table-light">
+                                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                                 <tr>
                                                     <th>Project</th>
                                                     <th>Task</th>
@@ -170,28 +172,56 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <t t-foreach="state.projectBreakdown" t-as="row" t-key="row.id">
-                                                    <tr>
-                                                        <td>
+                                                <t t-foreach="getGroupedBreakdown()" t-as="group" t-key="group.project_name">
+                                                    <!-- Group header row -->
+                                                    <tr class="table-light cursor-pointer"
+                                                        t-on-click="() => this.toggleProjectGroup(group.project_name)"
+                                                        style="cursor: pointer;">
+                                                        <td colspan="2" class="fw-bold">
+                                                            <i t-att-class="'fa me-1 ' + (state.collapsedProjects[group.project_name] ? 'fa-caret-right' : 'fa-caret-down')"/>
                                                             <i class="fa fa-folder-o me-1 text-muted"/>
-                                                            <t t-esc="row.project_name"/>
+                                                            <t t-esc="group.project_name || 'No Project'"/>
+                                                            <span class="badge bg-secondary ms-2" t-esc="group.rows.length"/>
                                                         </td>
-                                                        <td class="text-muted" t-esc="row.task_name or '-'"/>
-                                                        <td class="text-end fw-bold" t-esc="formatHours(row.hours)"/>
+                                                        <td class="text-end fw-bold" t-esc="formatHours(group.total_hours)"/>
                                                         <td>
                                                             <div class="d-flex align-items-center">
                                                                 <div class="progress flex-grow-1" style="height: 18px;">
                                                                     <div class="progress-bar bg-primary"
                                                                          role="progressbar"
-                                                                         t-attf-style="width: {{ row.percentage }}%">
+                                                                         t-attf-style="width: {{ group.total_percentage }}%">
                                                                     </div>
                                                                 </div>
                                                                 <small class="text-muted ms-2"
                                                                        style="min-width: 35px;"
-                                                                       t-esc="row.percentage + '%'"/>
+                                                                       t-esc="group.total_percentage + '%'"/>
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <!-- Task rows (collapsed by default) -->
+                                                    <t t-if="!state.collapsedProjects[group.project_name]">
+                                                        <t t-foreach="group.rows" t-as="row" t-key="row.id">
+                                                            <tr>
+                                                                <td class="ps-4 text-muted" style="font-size: 0.9em;">
+                                                                </td>
+                                                                <td class="text-muted" style="font-size: 0.9em;" t-esc="row.task_name or '-'"/>
+                                                                <td class="text-end" style="font-size: 0.9em;" t-esc="formatHours(row.hours)"/>
+                                                                <td>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="progress flex-grow-1" style="height: 12px;">
+                                                                            <div class="progress-bar bg-primary opacity-50"
+                                                                                 role="progressbar"
+                                                                                 t-attf-style="width: {{ row.percentage }}%">
+                                                                            </div>
+                                                                        </div>
+                                                                        <small class="text-muted ms-2"
+                                                                               style="min-width: 35px; font-size: 0.85em;"
+                                                                               t-esc="row.percentage + '%'"/>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
                                                 </t>
                                             </tbody>
                                         </table>

@@ -12,6 +12,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import AccessError, ValidationError
 from odoo.osv import expression
 from odoo.tools import is_html_empty
+from odoo.tools.sql import SQL
 
 ARTICLE_PERMISSION_LEVEL = {'none': 0, 'read': 1, 'write': 2}
 

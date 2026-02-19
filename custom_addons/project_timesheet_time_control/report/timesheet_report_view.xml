@@ -14,15 +14,10 @@
                 <separator/>
                 <filter name="filter_today" string="Today"
                         domain="[('date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
-                <filter name="filter_this_week" string="This Week"
-                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d')),
-                                 ('date', '&lt;=', (context_today() + datetime.timedelta(days=6 - context_today().weekday())).strftime('%%Y-%%m-%%d'))]"/>
-                <filter name="filter_this_month" string="This Month"
-                        domain="[('date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
-                <filter name="filter_this_quarter" string="This Quarter"
-                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=(context_today().month - 1) %% 3 * 31)).strftime('%%Y-%%m-01'))]"/>
-                <filter name="filter_this_year" string="This Year"
-                        domain="[('date', '&gt;=', context_today().strftime('%%Y-01-01'))]"/>
+                <filter name="filter_this_week" string="This Week" date="date"/>
+                <filter name="filter_this_month" string="This Month" date="date"/>
+                <filter name="filter_this_quarter" string="This Quarter" date="date"/>
+                <filter name="filter_this_year" string="This Year" date="date"/>
                 <separator/>
                 <filter name="filter_my_timesheets" string="My Timesheets"
                         domain="[('user_id', '=', uid)]"/>

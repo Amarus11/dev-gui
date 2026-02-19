@@ -20,6 +20,7 @@ export class TimesheetDashboard extends Component {
             projectBreakdown: [],
             dailyBreakdown: [],
             loading: true,
+            collapsedProjects: {},
         });
         onWillStart(async () => {
             await this.loadData();
@@ -51,14 +52,48 @@ export class TimesheetDashboard extends Component {
         return formatFloatTime(val);
     }
 
+    getGroupedBreakdown() {
+        const groups = {};
+        for (const row of this.state.projectBreakdown) {
+            const key = row.project_name || '';
+            if (!groups[key]) {
+                groups[key] = {
+                    project_name: key,
+                    rows: [],
+                    total_hours: 0,
+                    total_percentage: 0,
+                };
+                // Collapse by default on first load
+                if (!(key in this.state.collapsedProjects)) {
+                    this.state.collapsedProjects[key] = true;
+                }
+            }
+            groups[key].rows.push(row);
+            groups[key].total_hours += row.hours;
+            groups[key].total_percentage = Math.round(
+                (groups[key].total_percentage * 10 + row.percentage * 10) / 10
+            );
+        }
+        // Recalculate percentage properly
+        for (const g of Object.values(groups)) {
+            g.total_percentage = Math.round(g.rows.reduce((s, r) => s + r.percentage, 0) * 10) / 10;
+        }
+        return Object.values(groups).sort((a, b) => b.total_hours - a.total_hours);
+    }
+
+    toggleProjectGroup(projectName) {
+        this.state.collapsedProjects[projectName] = !this.state.collapsedProjects[projectName];
+    }
+
     getMaxDailyHours() {
         if (!this.state.dailyBreakdown.length) return 1;
         return Math.max(...this.state.dailyBreakdown.map((d) => d.hours), 1);
     }
 
     getDailyBarHeight(hours) {
+        const maxBarPx = 170; // max bar height in pixels (fits within 220px container)
         const max = this.getMaxDailyHours();
-        return Math.max((hours / max) * 100, 2);
+        return Math.max(Math.round((hours / max) * maxBarPx), 4);
     }
 
     openAnalysis(period) {
