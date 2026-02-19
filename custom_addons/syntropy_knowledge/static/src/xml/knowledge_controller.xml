@@ -5,23 +5,13 @@
     <t t-name="syntropy_knowledge.KnowledgeArticleFormView">
         <div class="o_knowledge_form_view d-flex h-100">
             <!-- Sidebar -->
-            <KnowledgeSidebar
-                record="model.root"
-            />
-            <!-- Resize handle -->
-            <div class="o_knowledge_sidebar_resizer" t-ref="resizer"/>
+            <KnowledgeSidebar record="model.root"/>
             <!-- Main content area -->
             <div class="o_knowledge_main flex-grow-1 overflow-auto">
-                <t t-call="{{ templates.FormRenderer }}"/>
+                <t t-component="props.Renderer"
+                   t-props="contentProps"/>
             </div>
         </div>
-        <!-- Mobile backdrop overlay -->
-        <div class="o_knowledge_sidebar_backdrop d-none"
-             t-on-click="() => this.toggleMobileSidebar()"/>
-    </t>
-
-    <!-- Custom form renderer that just renders the compiled arch -->
-    <t t-name="syntropy_knowledge.KnowledgeArticleFormRenderer" t-inherit="web.FormRenderer" t-inherit-mode="primary">
     </t>
 
 </templates>

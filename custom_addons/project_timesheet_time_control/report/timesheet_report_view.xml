@@ -14,18 +14,7 @@
                 <separator/>
                 <filter name="filter_today" string="Today"
                         domain="[('date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
-                <filter name="filter_this_week" string="This Week"
-                        domain="[('date', '&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d')),
-                                 ('date', '&lt;=', (context_today() - relativedelta(days=context_today().weekday()) + relativedelta(days=6)).strftime('%%Y-%%m-%%d'))]"/>
-                <filter name="filter_this_month" string="This Month"
-                        domain="[('date', '&gt;=', context_today().strftime('%%Y-%%m-01')),
-                                 ('date', '&lt;', (context_today() + relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
-                <filter name="filter_this_quarter" string="This Quarter"
-                        domain="[('date', '&gt;=', (context_today() - relativedelta(months=(context_today().month - 1) %% 3)).strftime('%%Y-%%m-01')),
-                                 ('date', '&lt;', (context_today() + relativedelta(months=3 - (context_today().month - 1) %% 3)).strftime('%%Y-%%m-01'))]"/>
-                <filter name="filter_this_year" string="This Year"
-                        domain="[('date', '&gt;=', context_today().strftime('%%Y-01-01')),
-                                 ('date', '&lt;=', context_today().strftime('%%Y-12-31'))]"/>
+                <filter name="filter_date" string="Date" date="date"/>
                 <separator/>
                 <filter name="filter_my_timesheets" string="My Timesheets"
                         domain="[('user_id', '=', uid)]"/>
@@ -102,7 +91,7 @@
         <field name="view_mode">graph,pivot,list</field>
         <field name="search_view_id" ref="timesheet_time_report_search"/>
         <field name="context">{
-            'search_default_filter_this_month': 1,
+            'search_default_filter_date': 1,
             'search_default_group_project': 1,
         }</field>
         <field name="help" type="html">

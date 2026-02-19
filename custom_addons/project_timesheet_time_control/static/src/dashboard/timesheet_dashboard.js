@@ -97,28 +97,65 @@ export class TimesheetDashboard extends Component {
     }
 
     openAnalysis(period) {
-        const filterMap = {
-            today: "filter_today",
-            week: "filter_this_week",
-            month: "filter_this_month",
-            quarter: "filter_this_quarter",
-            year: "filter_this_year",
-        };
-        const filterName = filterMap[period] || "filter_this_month";
-        // Clear all default period filters, then activate only the requested one
-        const ctx = {
-            search_default_filter_today: 0,
-            search_default_filter_this_week: 0,
-            search_default_filter_this_month: 0,
-            search_default_filter_this_quarter: 0,
-            search_default_filter_this_year: 0,
-            search_default_group_project: 1,
-        };
-        ctx[`search_default_${filterName}`] = 1;
-        this.action.doAction(
-            "project_timesheet_time_control.timesheet_time_report_action",
-            { additionalContext: ctx }
-        );
+        const { DateTime } = luxon;
+        const now = DateTime.now();
+        let domain = [];
+        let name = "Timesheet Analysis";
+
+        switch (period) {
+            case "today":
+                domain = [["date", "=", now.toFormat("yyyy-MM-dd")]];
+                name = "Today's Timesheets";
+                break;
+            case "week": {
+                const startOfWeek = now.startOf("week");
+                const endOfWeek = now.endOf("week");
+                domain = [
+                    ["date", ">=", startOfWeek.toFormat("yyyy-MM-dd")],
+                    ["date", "<=", endOfWeek.toFormat("yyyy-MM-dd")],
+                ];
+                name = "This Week's Timesheets";
+                break;
+            }
+            case "month": {
+                const startOfMonth = now.startOf("month");
+                const endOfMonth = now.endOf("month");
+                domain = [
+                    ["date", ">=", startOfMonth.toFormat("yyyy-MM-dd")],
+                    ["date", "<=", endOfMonth.toFormat("yyyy-MM-dd")],
+                ];
+                name = "This Month's Timesheets";
+                break;
+            }
+            case "quarter": {
+                const quarterMonth = Math.floor((now.month - 1) / 3) * 3 + 1;
+                const startOfQuarter = DateTime.local(now.year, quarterMonth, 1);
+                const endOfQuarter = startOfQuarter.plus({ months: 3 }).minus({ days: 1 });
+                domain = [
+                    ["date", ">=", startOfQuarter.toFormat("yyyy-MM-dd")],
+                    ["date", "<=", endOfQuarter.toFormat("yyyy-MM-dd")],
+                ];
+                name = "This Quarter's Timesheets";
+                break;
+            }
+            case "year": {
+                domain = [
+                    ["date", ">=", now.startOf("year").toFormat("yyyy-MM-dd")],
+                    ["date", "<=", now.endOf("year").toFormat("yyyy-MM-dd")],
+                ];
+                name = "This Year's Timesheets";
+                break;
+            }
+        }
+
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: name,
+            res_model: "timesheet.time.report",
+            view_mode: "graph,pivot,list",
+            domain: domain,
+            context: { search_default_group_project: 1 },
+        });
     }
 
     async onRefresh() {
