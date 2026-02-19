@@ -105,13 +105,19 @@ export class TimesheetDashboard extends Component {
             year: "filter_this_year",
         };
         const filterName = filterMap[period] || "filter_this_month";
+        // Clear all default period filters, then activate only the requested one
+        const ctx = {
+            search_default_filter_today: 0,
+            search_default_filter_this_week: 0,
+            search_default_filter_this_month: 0,
+            search_default_filter_this_quarter: 0,
+            search_default_filter_this_year: 0,
+            search_default_group_project: 1,
+        };
+        ctx[`search_default_${filterName}`] = 1;
         this.action.doAction(
             "project_timesheet_time_control.timesheet_time_report_action",
-            {
-                additionalContext: {
-                    [`search_default_${filterName}`]: 1,
-                },
-            }
+            { additionalContext: ctx }
         );
     }
 
