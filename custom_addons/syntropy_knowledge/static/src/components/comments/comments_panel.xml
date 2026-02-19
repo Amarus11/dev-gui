@@ -31,7 +31,7 @@
                            placeholder="Add a comment..."
                            t-att-value="state.newCommentText"
                            t-on-input="(ev) => { state.newCommentText = ev.target.value; }"
-                           t-on-keydown="(ev) => { if (ev.key === 'Enter') this.createThread(); }"/>
+                           t-on-keydown="(ev) => { (ev.key === 'Enter') &amp;&amp; this.createThread(); }"/>
                     <button class="btn btn-primary" t-on-click="createThread">
                         <i class="fa fa-paper-plane"/>
                     </button>
