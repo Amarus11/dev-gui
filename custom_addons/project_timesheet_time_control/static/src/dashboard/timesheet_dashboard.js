@@ -152,7 +152,11 @@ export class TimesheetDashboard extends Component {
             type: "ir.actions.act_window",
             name: name,
             res_model: "timesheet.time.report",
-            view_mode: "graph,pivot,list",
+            views: [
+                [false, "graph"],
+                [false, "pivot"],
+                [false, "list"],
+            ],
             domain: domain,
             context: { search_default_group_project: 1 },
         });
