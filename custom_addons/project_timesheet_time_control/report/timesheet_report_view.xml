@@ -13,7 +13,7 @@
                 <field name="date"/>
                 <separator/>
                 <filter name="filter_today" string="Today"
-                        date="date" default_period="this_day"/>
+                        domain="[('date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
                 <filter name="filter_this_week" string="This Week"
                         date="date" default_period="this_week"/>
                 <filter name="filter_this_month" string="This Month"
