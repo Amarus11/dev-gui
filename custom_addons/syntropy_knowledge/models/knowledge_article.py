@@ -12,7 +12,6 @@ from odoo import api, fields, models, _
 from odoo.exceptions import AccessError, ValidationError
 from odoo.osv import expression
 from odoo.tools import is_html_empty
-from odoo.tools.sql import create_index, make_index_name, SQL
 
 ARTICLE_PERMISSION_LEVEL = {'none': 0, 'read': 1, 'write': 2}
 
@@ -43,7 +42,7 @@ class KnowledgeArticle(models.Model):
     name = fields.Char(
         string="Title",
         tracking=20,
-        index='trigram',
+        index=True,
     )
     body = fields.Html(
         string="Body",
@@ -392,24 +391,7 @@ class KnowledgeArticle(models.Model):
     # ==================================================================
 
     def init(self):
-        """Create a GIN trigram index on article name for full-text search (if pg_trgm is available)."""
         super().init()
-        try:
-            create_index(
-                self.env.cr,
-                make_index_name(self._table, 'name_gin'),
-                self._table,
-                [SQL("name gin_trgm_ops")],
-                method='GIN',
-            )
-        except Exception:
-            self.env.cr.rollback()
-            import logging
-            logging.getLogger(__name__).warning(
-                "Could not create GIN trigram index on knowledge_article.name. "
-                "Install PostgreSQL extension pg_trgm for better search performance: "
-                "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
-            )
 
     # ==================================================================
     # CONSTRAINTS
