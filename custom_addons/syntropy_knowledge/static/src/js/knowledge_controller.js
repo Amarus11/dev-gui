@@ -5,9 +5,14 @@ import { FormController } from "@web/views/form/form_controller";
 import { useService } from "@web/core/utils/hooks";
 import { useChildSubEnv } from "@odoo/owl";
 import { getRandomEmoji } from "./knowledge_utils";
+import { KnowledgeSidebar } from "../components/sidebar/sidebar";
 
 export class KnowledgeArticleFormController extends FormController {
     static template = "syntropy_knowledge.KnowledgeArticleFormView";
+    static components = {
+        ...FormController.components,
+        KnowledgeSidebar,
+    };
 
     setup() {
         super.setup();
