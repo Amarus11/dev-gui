@@ -15,13 +15,13 @@
                 <filter name="filter_today" string="Today"
                         domain="[('date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
                 <filter name="filter_this_week" string="This Week"
-                        date="date" default_period="this_week"/>
+                        date="date" default_period="week"/>
                 <filter name="filter_this_month" string="This Month"
-                        date="date" default_period="this_month"/>
+                        date="date" default_period="month"/>
                 <filter name="filter_this_quarter" string="This Quarter"
-                        date="date" default_period="this_quarter"/>
+                        date="date" default_period="quarter"/>
                 <filter name="filter_this_year" string="This Year"
-                        date="date" default_period="this_year"/>
+                        date="date" default_period="year"/>
                 <separator/>
                 <filter name="filter_my_timesheets" string="My Timesheets"
                         domain="[('user_id', '=', uid)]"/>

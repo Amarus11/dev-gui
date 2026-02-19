@@ -145,9 +145,7 @@ class KnowledgeArticle(models.Model):
     )
     article_properties = fields.Properties(
         string="Properties",
-        definition='article_properties_definition',
-        definition_record='parent_id',
-        definition_record_field='article_properties_definition',
+        definition='parent_id.article_properties_definition',
         copy=True,
     )
 
