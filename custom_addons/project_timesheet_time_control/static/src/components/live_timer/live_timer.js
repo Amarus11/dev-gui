@@ -1,19 +1,14 @@
-/** @odoo-module **/
+/** @odoo-module */
 
 import { Component, useState, onMounted, onWillUnmount, onWillUpdateProps } from "@odoo/owl";
-import { computeElapsedSeconds, formatAdaptiveTimer } from "../../utils/timer_utils.esm";
+import { computeElapsedSeconds, formatAdaptiveTimer } from "@project_timesheet_time_control/utils/timer_utils";
 
 export class LiveTimer extends Component {
     static template = "project_timesheet_time_control.LiveTimer";
     static props = {
-        dateTime: { type: [String, Object, { value: false }], optional: true },
+        dateTime: { type: [String, Object, Boolean], optional: true },
         isRunning: { type: Boolean, optional: true },
         staticValue: { type: Number, optional: true },
-    };
-    static defaultProps = {
-        dateTime: false,
-        isRunning: false,
-        staticValue: 0,
     };
 
     setup() {

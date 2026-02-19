@@ -1,4 +1,4 @@
-/** @odoo-module **/
+/** @odoo-module */
 
 /**
  * Compute elapsed seconds from a UTC datetime value to now.

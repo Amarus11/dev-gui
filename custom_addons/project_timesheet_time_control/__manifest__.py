@@ -26,13 +26,13 @@
     ],
     "assets": {
         "web.assets_backend": [
-            "project_timesheet_time_control/static/src/utils/*.esm.js",
-            "project_timesheet_time_control/static/src/components/**/*.esm.js",
+            "project_timesheet_time_control/static/src/utils/*.js",
+            "project_timesheet_time_control/static/src/components/**/*.js",
             "project_timesheet_time_control/static/src/components/**/*.xml",
             "project_timesheet_time_control/static/src/components/**/*.scss",
-            "project_timesheet_time_control/static/src/fields/*.esm.js",
+            "project_timesheet_time_control/static/src/fields/*.js",
             "project_timesheet_time_control/static/src/fields/*.xml",
-            "project_timesheet_time_control/static/src/dashboard/*.esm.js",
+            "project_timesheet_time_control/static/src/dashboard/*.js",
             "project_timesheet_time_control/static/src/dashboard/*.xml",
             "project_timesheet_time_control/static/src/dashboard/*.scss",
         ],

@@ -1,9 +1,9 @@
-/** @odoo-module **/
+/** @odoo-module */
 
 import { Component, useState, onMounted, onWillUnmount, onWillUpdateProps } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import { computeElapsedSeconds, formatAdaptiveTimer } from "../../utils/timer_utils.esm";
+import { computeElapsedSeconds, formatAdaptiveTimer } from "@project_timesheet_time_control/utils/timer_utils";
 
 export class LiveTimerButtonField extends Component {
     static template = "project_timesheet_time_control.LiveTimerButtonField";

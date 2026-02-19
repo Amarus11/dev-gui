@@ -1,9 +1,9 @@
-/** @odoo-module **/
+/** @odoo-module */
 
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
-import { formatFloatTime } from "../utils/timer_utils.esm";
+import { formatFloatTime } from "@project_timesheet_time_control/utils/timer_utils";
 
 export class TimesheetDashboard extends Component {
     static template = "project_timesheet_time_control.TimesheetDashboard";
@@ -111,7 +111,5 @@ export class TimesheetDashboard extends Component {
         await this.loadData();
     }
 }
-
-TimesheetDashboard.template = "project_timesheet_time_control.TimesheetDashboard";
 
 registry.category("actions").add("timesheet_time_control_dashboard", TimesheetDashboard);
