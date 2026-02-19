@@ -122,12 +122,14 @@
                                 </div>
                             </div>
 
-                            <!-- Properties -->
-                            <widget name="knowledge_properties_panel"/>
-                            <!-- Chatter -->
-                            <widget name="knowledge_chatter_panel"/>
                             <!-- Comments Panel -->
                             <widget name="knowledge_comments_panel"/>
+                            <!-- Chatter -->
+                            <div class="oe_chatter">
+                                <field name="message_follower_ids"/>
+                                <field name="activity_ids"/>
+                                <field name="message_ids"/>
+                            </div>
                         </div>
                     </div>
                 </div>

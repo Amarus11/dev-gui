@@ -1,9 +1,8 @@
 /** @odoo-module **/
 
 import { Component, useState } from "@odoo/owl";
-import { useService } from "@web/core/utils/hooks";
 import { registry } from "@web/core/registry";
-import { standardWidgetProps } from "@web/views/widgets/standard_widget_props";
+import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { getRandomEmoji } from "../../js/knowledge_utils";
 
 const EMOJI_CATEGORIES = {
@@ -17,10 +16,12 @@ const EMOJI_CATEGORIES = {
 
 export class KnowledgeIcon extends Component {
     static template = "syntropy_knowledge.KnowledgeIcon";
-    static props = { ...standardWidgetProps };
+    static props = {
+        ...standardFieldProps,
+        allow_random_icon_selection: { type: Boolean, optional: true },
+    };
 
     setup() {
-        this.orm = useService("orm");
         this.state = useState({
             showPicker: false,
             searchTerm: "",
@@ -28,7 +29,7 @@ export class KnowledgeIcon extends Component {
     }
 
     get currentIcon() {
-        return this.props.record.data.icon || "";
+        return this.props.record.data[this.props.name] || "";
     }
 
     get emojiCategories() {
@@ -40,14 +41,12 @@ export class KnowledgeIcon extends Component {
     }
 
     async selectEmoji(emoji) {
-        await this.orm.write("knowledge.article", [this.props.record.resId], { icon: emoji });
-        await this.props.record.load();
+        await this.props.record.update({ [this.props.name]: emoji });
         this.state.showPicker = false;
     }
 
     async removeIcon() {
-        await this.orm.write("knowledge.article", [this.props.record.resId], { icon: false });
-        await this.props.record.load();
+        await this.props.record.update({ [this.props.name]: false });
         this.state.showPicker = false;
     }
 
@@ -56,6 +55,12 @@ export class KnowledgeIcon extends Component {
     }
 }
 
-registry.category("view_widgets").add("knowledge_icon", {
+export const knowledgeIconField = {
     component: KnowledgeIcon,
-});
+    supportedTypes: ["char"],
+    extractProps: ({ attrs }) => ({
+        allow_random_icon_selection: attrs.allow_random_icon_selection,
+    }),
+};
+
+registry.category("fields").add("knowledge_icon", knowledgeIconField);
