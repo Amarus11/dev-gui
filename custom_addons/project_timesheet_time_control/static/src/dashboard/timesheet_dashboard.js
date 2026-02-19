@@ -20,7 +20,6 @@ export class TimesheetDashboard extends Component {
             projectBreakdown: [],
             dailyBreakdown: [],
             loading: true,
-            activePeriod: "month",
         });
         onWillStart(async () => {
             await this.loadData();
@@ -60,32 +59,6 @@ export class TimesheetDashboard extends Component {
     getDailyBarHeight(hours) {
         const max = this.getMaxDailyHours();
         return Math.max((hours / max) * 100, 2);
-    }
-
-    setActivePeriod(period) {
-        this.state.activePeriod = period;
-    }
-
-    get periodTotal() {
-        const map = {
-            today: this.state.todayTotal,
-            week: this.state.weekTotal,
-            month: this.state.monthTotal,
-            quarter: this.state.quarterTotal,
-            year: this.state.yearTotal,
-        };
-        return map[this.state.activePeriod] || 0;
-    }
-
-    get periodLabel() {
-        const map = {
-            today: "Today",
-            week: "This Week",
-            month: "This Month",
-            quarter: "This Quarter",
-            year: "This Year",
-        };
-        return map[this.state.activePeriod] || "";
     }
 
     openAnalysis(period) {

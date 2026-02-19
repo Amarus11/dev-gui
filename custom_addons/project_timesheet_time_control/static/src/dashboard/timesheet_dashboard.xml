@@ -31,8 +31,8 @@
                     <!-- Summary Cards -->
                     <div class="row mb-4 g-3">
                         <div class="col-xl col-md-4 col-sm-6">
-                            <div t-attf-class="card shadow-sm border-0 h-100 o_dashboard_card {{ state.activePeriod === 'today' ? 'border-primary border-2' : '' }}"
-                                 t-on-click="() => this.setActivePeriod('today')">
+                            <div class="card shadow-sm border-0 h-100 o_dashboard_card"
+                                 t-on-click="() => this.openAnalysis('today')">
                                 <div class="card-body text-center py-3">
                                     <div class="text-muted small mb-1">
                                         <i class="fa fa-sun-o me-1"/>Today
@@ -40,16 +40,15 @@
                                     <h3 class="mb-0 text-primary" t-esc="formatHours(state.todayTotal)"/>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 text-center py-1">
-                                    <a href="#" class="small text-muted text-decoration-none"
-                                       t-on-click.stop.prevent="() => this.openAnalysis('today')">
+                                    <span class="small text-muted">
                                         View details <i class="fa fa-arrow-right ms-1"/>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl col-md-4 col-sm-6">
-                            <div t-attf-class="card shadow-sm border-0 h-100 o_dashboard_card {{ state.activePeriod === 'week' ? 'border-success border-2' : '' }}"
-                                 t-on-click="() => this.setActivePeriod('week')">
+                            <div class="card shadow-sm border-0 h-100 o_dashboard_card"
+                                 t-on-click="() => this.openAnalysis('week')">
                                 <div class="card-body text-center py-3">
                                     <div class="text-muted small mb-1">
                                         <i class="fa fa-calendar-o me-1"/>This Week
@@ -57,16 +56,15 @@
                                     <h3 class="mb-0 text-success" t-esc="formatHours(state.weekTotal)"/>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 text-center py-1">
-                                    <a href="#" class="small text-muted text-decoration-none"
-                                       t-on-click.stop.prevent="() => this.openAnalysis('week')">
+                                    <span class="small text-muted">
                                         View details <i class="fa fa-arrow-right ms-1"/>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl col-md-4 col-sm-6">
-                            <div t-attf-class="card shadow-sm border-0 h-100 o_dashboard_card {{ state.activePeriod === 'month' ? 'border-info border-2' : '' }}"
-                                 t-on-click="() => this.setActivePeriod('month')">
+                            <div class="card shadow-sm border-0 h-100 o_dashboard_card"
+                                 t-on-click="() => this.openAnalysis('month')">
                                 <div class="card-body text-center py-3">
                                     <div class="text-muted small mb-1">
                                         <i class="fa fa-calendar me-1"/>This Month
@@ -74,16 +72,15 @@
                                     <h3 class="mb-0 text-info" t-esc="formatHours(state.monthTotal)"/>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 text-center py-1">
-                                    <a href="#" class="small text-muted text-decoration-none"
-                                       t-on-click.stop.prevent="() => this.openAnalysis('month')">
+                                    <span class="small text-muted">
                                         View details <i class="fa fa-arrow-right ms-1"/>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl col-md-6 col-sm-6">
-                            <div t-attf-class="card shadow-sm border-0 h-100 o_dashboard_card {{ state.activePeriod === 'quarter' ? 'border-warning border-2' : '' }}"
-                                 t-on-click="() => this.setActivePeriod('quarter')">
+                            <div class="card shadow-sm border-0 h-100 o_dashboard_card"
+                                 t-on-click="() => this.openAnalysis('quarter')">
                                 <div class="card-body text-center py-3">
                                     <div class="text-muted small mb-1">
                                         <i class="fa fa-bar-chart me-1"/>This Quarter
@@ -91,16 +88,15 @@
                                     <h3 class="mb-0 text-warning" t-esc="formatHours(state.quarterTotal)"/>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 text-center py-1">
-                                    <a href="#" class="small text-muted text-decoration-none"
-                                       t-on-click.stop.prevent="() => this.openAnalysis('quarter')">
+                                    <span class="small text-muted">
                                         View details <i class="fa fa-arrow-right ms-1"/>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl col-md-6 col-sm-6">
-                            <div t-attf-class="card shadow-sm border-0 h-100 o_dashboard_card {{ state.activePeriod === 'year' ? 'border-danger border-2' : '' }}"
-                                 t-on-click="() => this.setActivePeriod('year')">
+                            <div class="card shadow-sm border-0 h-100 o_dashboard_card"
+                                 t-on-click="() => this.openAnalysis('year')">
                                 <div class="card-body text-center py-3">
                                     <div class="text-muted small mb-1">
                                         <i class="fa fa-calendar-check-o me-1"/>This Year
@@ -108,10 +104,9 @@
                                     <h3 class="mb-0 text-danger" t-esc="formatHours(state.yearTotal)"/>
                                 </div>
                                 <div class="card-footer bg-transparent border-0 text-center py-1">
-                                    <a href="#" class="small text-muted text-decoration-none"
-                                       t-on-click.stop.prevent="() => this.openAnalysis('year')">
+                                    <span class="small text-muted">
                                         View details <i class="fa fa-arrow-right ms-1"/>
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
