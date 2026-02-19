@@ -1,0 +1,43 @@
+.o_timesheet_dashboard {
+    background-color: #f8f9fa;
+    min-height: 100%;
+
+    .o_dashboard_card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+    }
+
+    .o_daily_bar {
+        min-height: 4px;
+        transition: height 0.3s ease;
+    }
+
+    .progress {
+        border-radius: 4px;
+        background-color: #e9ecef;
+    }
+
+    .progress-bar {
+        transition: width 0.4s ease;
+        border-radius: 4px;
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table {
+        th {
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+}

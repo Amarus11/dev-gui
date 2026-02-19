@@ -1,0 +1,16 @@
+.o_live_timer {
+    font-variant-numeric: tabular-nums;
+    font-family: inherit;
+    white-space: nowrap;
+
+    &.o_live_timer_running {
+        color: var(--success);
+        font-weight: 600;
+        animation: o_timer_pulse 2s ease-in-out infinite;
+    }
+}
+
+@keyframes o_timer_pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}

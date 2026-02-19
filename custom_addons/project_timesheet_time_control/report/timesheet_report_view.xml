@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Search View -->
+    <record id="timesheet_time_report_search" model="ir.ui.view">
+        <field name="name">timesheet.time.report.search</field>
+        <field name="model">timesheet.time.report</field>
+        <field name="arch" type="xml">
+            <search string="Timesheet Analysis">
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="department_id"/>
+                <field name="date"/>
+                <separator/>
+                <filter name="filter_today" string="Today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_this_week" string="This Week"
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d')),
+                                 ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-01')),
+                                 ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_this_quarter" string="This Quarter"
+                        domain="[('quarter', '=', str(((context_today().month - 1) // 3) + 1)),
+                                 ('year', '=', context_today().year)]"/>
+                <filter name="filter_this_year" string="This Year"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-01-01')),
+                                 ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="filter_my_timesheets" string="My Timesheets"
+                        domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="group_project" string="Project"
+                        context="{'group_by': 'project_id'}"/>
+                <filter name="group_task" string="Task"
+                        context="{'group_by': 'task_id'}"/>
+                <filter name="group_employee" string="Employee"
+                        context="{'group_by': 'employee_id'}"/>
+                <filter name="group_department" string="Department"
+                        context="{'group_by': 'department_id'}"/>
+                <separator/>
+                <filter name="group_date_day" string="Day"
+                        context="{'group_by': 'date:day'}"/>
+                <filter name="group_date_week" string="Week"
+                        context="{'group_by': 'date:week'}"/>
+                <filter name="group_date_month" string="Month"
+                        context="{'group_by': 'date:month'}"/>
+                <filter name="group_date_quarter" string="Quarter"
+                        context="{'group_by': 'date:quarter'}"/>
+                <filter name="group_date_year" string="Year"
+                        context="{'group_by': 'date:year'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="timesheet_time_report_tree" model="ir.ui.view">
+        <field name="name">timesheet.time.report.tree</field>
+        <field name="model">timesheet.time.report</field>
+        <field name="arch" type="xml">
+            <list string="Timesheet Analysis" create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="unit_amount" widget="float_time" string="Duration" sum="Total"/>
+                <field name="department_id" optional="hide"/>
+                <field name="day_of_week" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="timesheet_time_report_graph" model="ir.ui.view">
+        <field name="name">timesheet.time.report.graph</field>
+        <field name="model">timesheet.time.report</field>
+        <field name="arch" type="xml">
+            <graph string="Timesheet Analysis" type="bar" stacked="True">
+                <field name="project_id" type="row"/>
+                <field name="unit_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="timesheet_time_report_pivot" model="ir.ui.view">
+        <field name="name">timesheet.time.report.pivot</field>
+        <field name="model">timesheet.time.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Timesheet Analysis">
+                <field name="employee_id" type="row"/>
+                <field name="project_id" type="col"/>
+                <field name="unit_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="timesheet_time_report_action" model="ir.actions.act_window">
+        <field name="name">Timesheet Analysis</field>
+        <field name="res_model">timesheet.time.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="timesheet_time_report_search"/>
+        <field name="context">{
+            'search_default_filter_this_month': 1,
+            'search_default_group_project': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No timesheet data found
+            </p>
+            <p>
+                Start tracking time on your projects and tasks to see analytics here.
+            </p>
+        </field>
+    </record>
+</odoo>

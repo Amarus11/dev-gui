@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_timesheet_switch_portal,access_hr_timesheet_switch portal,model_hr_timesheet_switch,hr_timesheet.group_hr_timesheet_user,1,1,1,1
+access_timesheet_time_report_user,access_timesheet_time_report_user,model_timesheet_time_report,hr_timesheet.group_hr_timesheet_user,1,0,0,0
+access_timesheet_time_report_manager,access_timesheet_time_report_manager,model_timesheet_time_report,hr_timesheet.group_timesheet_manager,1,0,0,0

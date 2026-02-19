@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="project_timesheet_time_control.LiveTimerButtonField">
+        <span t-if="isRunning and state.displayText"
+              class="o_live_timer o_live_timer_running o_live_timer_in_button">
+            <i class="fa fa-clock-o me-1"/>
+            <t t-esc="state.displayText"/>
+        </span>
+    </t>
+</templates>
